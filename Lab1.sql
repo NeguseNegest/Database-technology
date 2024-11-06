@@ -1,6 +1,107 @@
-CREATE TABLE test_table (
-    id SERIAL PRIMARY KEY,
-    name VARCHAR(50)
+CREATE TABLE Users (
+    UserID INTEGER NOT NULL,
+    Username VARCHAR(300) NOT NULL,
+    PRIMARY KEY (UserID)
 );
 
-INSERT INTO test_table (name) VALUES ('Sample Name');
+CREATE TABLE Friendship (
+    UserID1 INTEGER NOT NULL,
+    UserID2 INTEGER NOT NULL,
+    PRIMARY KEY (UserID1, UserID2),
+    FOREIGN KEY (UserID1) REFERENCES Users(UserID),
+    FOREIGN KEY (UserID2) REFERENCES Users(UserID),
+);
+
+CREATE TABLE Post (
+    PostID INTEGER NOT NULL,
+    CHECK (PostID >= 0),
+    UserID INTEGER NOT NULL,
+    Title VARCHAR(300),
+    Date DATE NOT NULL,
+    Place VARCHAR(300),
+    PRIMARY KEY (PostID),
+    FOREIGN KEY (UserID) REFERENCES Users(UserID)
+);
+
+CREATE TABLE PostTags (
+    PostID INTEGER NOT NULL,
+    Tag VARCHAR(10) NOT NULL CHECK (Tag IN ('Crypto', 'Studying', 'Question', 'Social')),
+    FOREIGN KEY (PostID) REFERENCES Post(PostID),
+    PRIMARY KEY (PostID, Tag)  
+);
+
+CREATE TABLE ImagePost (
+    PostID INTEGER,
+    URL VARCHAR(300) NOT NULL,
+    Filter VARCHAR(300),
+    PRIMARY KEY (PostID),
+    FOREIGN KEY (PostID) REFERENCES Post(PostID)
+);
+
+CREATE TABLE TextPost (
+    PostID INTEGER,
+    Content VARCHAR(700) NOT NULL,
+    PRIMARY KEY (PostID),
+    FOREIGN KEY (PostID) REFERENCES Post(PostID)
+);
+
+CREATE TABLE VideoPost (
+    PostID INTEGER,
+    URL VARCHAR(300) NOT NULL,
+    Codec VARCHAR(50) NOT NULL,
+    PRIMARY KEY (PostID),
+    FOREIGN KEY (PostID) REFERENCES Post(PostID)
+);
+
+CREATE TABLE PostLike (
+    PostID INTEGER NOT NULL,
+    UserID INTEGER NOT NULL,
+    Timestamp DATE NOT NULL,
+    PRIMARY KEY (PostID, UserID),
+    FOREIGN KEY (UserID) REFERENCES Users(UserID),
+    FOREIGN KEY (PostID) REFERENCES Post(PostID)
+);
+
+CREATE TABLE Event (
+    EventID INTEGER NOT NULL,
+    UserID INTEGER NOT NULL,
+    Title VARCHAR(300) NOT NULL,
+    Place VARCHAR(300) NOT NULL,
+    StartDate DATE NOT NULL,
+    EndDate DATE NOT NULL,
+    Duration INTEGER NOT NULL,
+    PRIMARY KEY (EventID),
+    FOREIGN KEY (UserID) REFERENCES Users(UserID),
+    CHECK (StartDate <= EndDate)  
+);
+
+CREATE TABLE Attendee (
+    EventID INTEGER NOT NULL,
+    UserID INTEGER NOT NULL,
+    PRIMARY KEY (EventID, UserID),
+    FOREIGN KEY (EventID) REFERENCES Event(EventID),
+    FOREIGN KEY (UserID) REFERENCES Users(UserID)
+);
+
+CREATE TABLE Subscription (
+    SubscriptionID INTEGER NOT NULL,
+    UserID INTEGER NOT NULL,  
+    PaymentDate DATE NOT NULL,
+    PaymentMethod VARCHAR(30) NOT NULL, 
+    CHECK (PaymentMethod IN ('Klarna', 'Swish', 'Card', 'Bitcoin')),
+    ExpiryDate DATE NOT NULL,
+    PRIMARY KEY (SubscriptionID),
+    FOREIGN KEY (UserID) REFERENCES Users(UserID)
+);
+
+DROP TABLE IF EXISTS Subscription;
+DROP TABLE IF EXISTS Attendee;
+DROP TABLE IF EXISTS Event;
+DROP TABLE IF EXISTS PostLike;
+DROP TABLE IF EXISTS VideoPost;
+DROP TABLE IF EXISTS TextPost;
+DROP TABLE IF EXISTS ImagePost;
+DROP TABLE IF EXISTS Post;
+DROP TABLE IF EXISTS Friendship;
+DROP TABLE IF EXISTS Users;
+DROP TABLE IF EXISTS PostTags;
