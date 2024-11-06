@@ -9,12 +9,12 @@ CREATE TABLE Friendship (
     UserID2 INTEGER NOT NULL,
     PRIMARY KEY (UserID1, UserID2),
     FOREIGN KEY (UserID1) REFERENCES Users(UserID),
-    FOREIGN KEY (UserID2) REFERENCES Users(UserID),
+    FOREIGN KEY (UserID2) REFERENCES Users(UserID)
 );
 
 CREATE TABLE Post (
     PostID INTEGER NOT NULL,
-    CHECK (PostID >= 0),
+    CHECK (PostID >= 0),--This is an attribute based constraint 
     UserID INTEGER NOT NULL,
     Title VARCHAR(300),
     Date DATE NOT NULL,
@@ -72,7 +72,7 @@ CREATE TABLE Event (
     Duration INTEGER NOT NULL,
     PRIMARY KEY (EventID),
     FOREIGN KEY (UserID) REFERENCES Users(UserID),
-    CHECK (StartDate <= EndDate)  
+    CHECK (StartDate <= EndDate)  -- This is a tuple based constraint, this essentially means we are comparing two columns.
 );
 
 CREATE TABLE Attendee (
@@ -94,14 +94,3 @@ CREATE TABLE Subscription (
     FOREIGN KEY (UserID) REFERENCES Users(UserID)
 );
 
-DROP TABLE IF EXISTS Subscription;
-DROP TABLE IF EXISTS Attendee;
-DROP TABLE IF EXISTS Event;
-DROP TABLE IF EXISTS PostLike;
-DROP TABLE IF EXISTS VideoPost;
-DROP TABLE IF EXISTS TextPost;
-DROP TABLE IF EXISTS ImagePost;
-DROP TABLE IF EXISTS Post;
-DROP TABLE IF EXISTS Friendship;
-DROP TABLE IF EXISTS Users;
-DROP TABLE IF EXISTS PostTags;
