@@ -1,6 +1,10 @@
+
+-----------TASK 2------------
+
+
 CREATE TABLE Users (
     UserID INTEGER NOT NULL,
-    Username VARCHAR(300) NOT NULL,
+    Username VARCHAR(30) NOT NULL,
     PRIMARY KEY (UserID)
 );
 
@@ -14,7 +18,7 @@ CREATE TABLE Friendship (
 
 CREATE TABLE Post (
     PostID INTEGER NOT NULL,
-    CHECK (PostID >= 0),--This is an attribute based constraint 
+    CHECK (PostID >= 0),--This is an attribute  based constraint 
     UserID INTEGER NOT NULL,
     Title VARCHAR(300),
     Date DATE NOT NULL,
@@ -24,8 +28,9 @@ CREATE TABLE Post (
 );
 
 CREATE TABLE PostTags (
-    PostID INTEGER NOT NULL,
-    Tag VARCHAR(10) NOT NULL CHECK (Tag IN ('Crypto', 'Studying', 'Question', 'Social')),
+    PostID INTEGER,
+    Tag VARCHAR(10),-- explain why this is null, based on homework.
+    CHECK (Tag IN ('Crypto', 'Studying', 'Question', 'Social')),
     FOREIGN KEY (PostID) REFERENCES Post(PostID),
     PRIMARY KEY (PostID, Tag)  
 );
@@ -54,7 +59,7 @@ CREATE TABLE VideoPost (
 );
 
 CREATE TABLE PostLike (
-    PostID INTEGER NOT NULL,
+    PostID INTEGER,
     UserID INTEGER NOT NULL,
     Timestamp DATE NOT NULL,
     PRIMARY KEY (PostID, UserID),
@@ -65,7 +70,7 @@ CREATE TABLE PostLike (
 CREATE TABLE Event (
     EventID INTEGER NOT NULL,
     UserID INTEGER NOT NULL,
-    Title VARCHAR(300) NOT NULL,
+    Title VARCHAR(300),
     Place VARCHAR(300) NOT NULL,
     StartDate DATE NOT NULL,
     EndDate DATE NOT NULL,
@@ -83,16 +88,36 @@ CREATE TABLE Attendee (
     FOREIGN KEY (UserID) REFERENCES Users(UserID)
 );
 
-CREATE TABLE Subscription (
+CREATE TABLE Subscriptions (
     SubscriptionID INTEGER NOT NULL,
     UserID INTEGER NOT NULL,  
     PaymentDate DATE NOT NULL,
     PaymentMethod VARCHAR(30) NOT NULL, 
     CHECK (PaymentMethod IN ('Klarna', 'Swish', 'Card', 'Bitcoin')),
     ExpiryDate DATE NOT NULL,
+    CHECK(ExpiryDate>=PaymentDate),
     PRIMARY KEY (SubscriptionID),
     FOREIGN KEY (UserID) REFERENCES Users(UserID)
 );
+
+
+/*
+1. What is a trigger?
+2. Name 3 events that can cause a trigger to activate
+3. What can be done with triggers?
+
+1.Triggers in SQL are types of stored procedures that run in response to an event
+
+2. Examples of triggers are INSERT, CREATE statement and DELETE.
+
+3. Triggers are useful for maintaing the data integrity in the database. For example if we have a 
+table that stores all the sales of a person then the total sale atttribute will be updated when a 
+person makes a sale. 
+
+
+*/
+
+-------------------TASK 3------------------
 
 -- Populating the database. Task 3 in lab. 
 /*The database must contain at least:
@@ -133,16 +158,16 @@ INSERT INTO PostTags(PostID, Tag) VALUES
     (9, 'Social');          
 
 INSERT INTO TextPost(PostID, Content) VALUES 
-    (7, 'I am really trying to finish this lab on time! Anyone want to join?');
+    (7, 'I am really trying to finish this lab on time! Anyone want to to join?');
 
 INSERT INTO ImagePost(PostID, URL, Filter) VALUES 
-    (8, 'http://images.example.com/crypto_talk.png', 'Vintage');
+    (8, 'http://images.png', 'OLDSCHOOL');
 
 INSERT INTO VideoPost(PostID, URL, Codec) VALUES 
-    (9, 'http://videos.example.com/beach_view.mp4', 'H.264');
+    (9, 'http://videos.mp4', 'H.400');
 
 INSERT INTO PostLike(PostID, UserID, Timestamp) VALUES 
-    (7, 2, '2024-11-01'),
+    (7, 2, '2024-11-03'),
     (7, 4, '2024-11-01'),
     (8, 1, '2024-07-05'),
     (8, 5, '2024-07-06'),
@@ -150,7 +175,7 @@ INSERT INTO PostLike(PostID, UserID, Timestamp) VALUES
     (9, 6, '2024-09-16');
 
 INSERT INTO Event(EventID, UserID, Title, Place, StartDate, EndDate, Duration) VALUES 
-    (1, 1, 'Study Group Meetup', 'University Library', '2024-11-04', '2024-11-04', 2);
+    (1, 1, 'Study Group', 'Uni Library', '2024-11-04', '2024-11-04', 2);
 
 INSERT INTO Attendee(EventID, UserID) VALUES 
     (1, 5),
@@ -162,16 +187,26 @@ INSERT INTO Subscription(SubscriptionID, UserID, PaymentDate, PaymentMethod, Exp
     (3, 3, '2024-10-03', 'Card', '2024-11-02'),
     (4, 4, '2024-10-04', 'Bitcoin', '2024-11-03'),
     (5, 5, '2024-10-05', 'Klarna', '2024-11-04'),
-    (6, 6, '2024-10-06', 'Swish', '2024-11-05');
+    (6, 6, '2024-10-06', 'Swish', '2024-11-06');
 
 
-SELECT Username AS FULLNAMES FROM Users;
-SELECT UserID1, UserID2 FROM Friendship;
-SELECT PostID, Content FROM TextPost;
-SELECT PostID, URL, Codec FROM VideoPost;
-SELECT PostID, URL, Filter FROM ImagePost;
+
+----------------------------TASK 4----------------------------
+
+--SELECT * FROM Users;
+
+SELECT Username AS FULLNAME FROM Users;
+SELECT * FROM Friendship;
+--SELECT * FROM Post INNER JOIN TextPost ON Post.postid=TextPost.postid;
+SELECT * FROM TextPost;
+SELECT * FROM VideoPost;
+SELECT * FROM ImagePost;
 SELECT EventID, UserID AS Host, Title, Place, StartDate, EndDate, Duration FROM Event;
+SELECT * FROM Subscription;
+SELECT PostID, Tag FROM PostTags;
 
-SELECT SubscriptionID, UserID, PaymentDate, PaymentMethod, ExpiryDate FROM Subscription;
 
 
+TRUNCATE TABLE PostTags, PostLike, TextPost, ImagePost, VideoPost, Post, Friendship, Event, Attendee, Subscription, Users;
+
+-------------------------- TASK P+------------------------
