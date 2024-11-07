@@ -11,7 +11,9 @@ CREATE TABLE Employee(
     EmployeeID INTEGER NOT NULL PRIMARY KEY,
     PhoneNR INTEGER NOT NULL,
     MentorID VARCHAR(300),
-    FOREIGN KEY (DepartmentName) REFERENCES Department(DepartmentName)
+    DepartmentName VARCHAR(300),
+    FOREIGN KEY (DepartmentName) REFERENCES Department(DepartmentName),
+    FOREIGN KEY (MentorID) REFERENCES EmployeeID(EmployeeID)
 );
 
 CREATE TABLE Workers(
@@ -32,7 +34,7 @@ CREATE TABLE NURSE(
 CREATE TABLE Doctor(
     DoctorID INTEGER PRIMARY KEY,
     RoomNr INTEGER,
-    Specialization VARCHAR(30),
+    Specialization VARCHAR(30)[],
     FOREIGN KEY (DoctorID) REFERENCES Employee(EmployeeID)
 );
 
@@ -40,13 +42,13 @@ CREATE TABLE Patient(
     PatientID INTEGER PRIMARY KEY,
     AGE INTEGER,
     NAME VARCHAR(30),
-    DIAGNOSIS VARCHAR(300),
+    DIAGNOSIS VARCHAR(30000)[],
 );
 
-CREATE TREATING(
-    EmployeeID INTEGER,
+CREATE TABLE Treating (
+    DoctorID INTEGER,
     PatientID INTEGER,
-    PRIMARY KEY (EmployeeID,PatientID)
-    FOREIGN KEY (PatientID) REFERENCES Patient(PatientID),
-    FOREIGN KEY (EmployeeID) REFERENCES Employee(EmployeeID)
+    PRIMARY KEY (DoctorID, PatientID),
+    FOREIGN KEY (DoctorID) REFERENCES Doctor(DoctorID),
+    FOREIGN KEY (PatientID) REFERENCES Patient(PatientID)
 );
