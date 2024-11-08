@@ -99,13 +99,16 @@ CREATE TABLE Subscriptions (
 
 
 /*
-1. What is a trigger?
-2. Name 3 events that can cause a trigger to activate
-3. What can be done with triggers?
 
-1.Triggers in SQL are types of stored procedures that run in response to an event
 
-2. Examples of triggers are INSERT, CREATE statement and DELETE.
+
+1.Triggers in SQL are stored procedures that are set off by a certain event. 
+
+2. Examples of triggers are 
+
+-INSERT
+-CREATE
+-DELETE
 
 3. Triggers are useful for maintaing the data integrity in the database. For example if we have a 
 table that stores all the sales of a person then the total sale atttribute will be updated when a 
@@ -195,7 +198,7 @@ SELECT * FROM VideoPost;
 SELECT * FROM ImagePost;
 SELECT EventID, UserID AS Host, Title, Place, StartDate, EndDate, Duration FROM Event;
 SELECT * FROM Subscription;
-SELECT PostID, Tag FROM PostTags;
+SELECT PostID, tags FROM Post;
 
 
 

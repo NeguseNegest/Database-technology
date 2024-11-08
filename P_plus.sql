@@ -13,7 +13,7 @@ CREATE TABLE Employee(
     MentorID VARCHAR(300),
     DepartmentName VARCHAR(300),
     FOREIGN KEY (DepartmentName) REFERENCES Department(DepartmentName),
-    FOREIGN KEY (MentorID) REFERENCES EmployeeID(EmployeeID)
+    FOREIGN KEY (MentorID) REFERENCES Employee(EmployeeID)
 );
 
 CREATE TABLE Workers(
